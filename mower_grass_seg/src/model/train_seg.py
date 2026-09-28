@@ -27,7 +27,7 @@ def main() -> None:
     settings = {
         "data": DATA_CONFIG,
         "epochs": 200,
-        "patience": 30,
+        "patience": 20,
         "imgsz": 640,
         "batch": 16,
         "workers": 4,
@@ -39,7 +39,7 @@ def main() -> None:
         "mosaic": 0.0,
         "close_mosaic": 0,
         "project": PROJECT_ROOT / "runs/segment",
-        "name": "B05",
+        "name": "B06",
     }
     if args.device:
         settings["device"] = args.device
