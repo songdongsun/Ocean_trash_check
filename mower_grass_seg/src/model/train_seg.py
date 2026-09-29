@@ -37,9 +37,9 @@ def main() -> None:
         "warmup_bias_lr": 0.0,
         "amp": False,
         "mosaic": 0.3,
-        "close_mosaic": 10,
+        "close_mosaic": 80,
         "project": PROJECT_ROOT / "runs/segment",
-        "name": "B07_v2",
+        "name": "B07_v3",
     }
     if args.device:
         settings["device"] = args.device
