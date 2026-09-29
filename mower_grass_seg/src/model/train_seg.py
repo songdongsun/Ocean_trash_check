@@ -36,10 +36,10 @@ def main() -> None:
         "momentum": 0.9,
         "warmup_bias_lr": 0.0,
         "amp": False,
-        "mosaic": 0.3,
+        "mosaic": 0.0,
         "close_mosaic": 80,
         "project": PROJECT_ROOT / "runs/segment",
-        "name": "B07_v4",
+        "name": "B08",
     }
     if args.device:
         settings["device"] = args.device
