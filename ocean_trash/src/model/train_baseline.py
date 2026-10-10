@@ -28,6 +28,9 @@ def parse_args():
     parser.add_argument("--model", default="yolo11n-seg.pt", help="COCO-pretrained segmentation checkpoint")
     parser.add_argument("--data", type=Path, default=PROJECT_ROOT / "data/trashcan_instance_yolo/trashcan_instance.yaml")
     parser.add_argument("--epochs", type=int, default=100)
+    parser.add_argument(
+        "--patience", type=int, default=0, help="Stop after this many epochs without improvement; 0 disables early stopping"
+    )
     parser.add_argument("--imgsz", type=int, default=640)
     parser.add_argument("--batch", type=int, default=16)
     parser.add_argument("--device", default="0", help="Training GPU index, e.g. 0 or 2,5")
@@ -45,7 +48,7 @@ def main():
     model.train(
         data=str(args.data.resolve()),
         epochs=args.epochs,
-        patience=0,
+        patience=args.patience,
         imgsz=args.imgsz,
         batch=args.batch,
         device=args.device,
