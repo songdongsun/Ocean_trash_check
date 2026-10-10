@@ -5,6 +5,7 @@
 Run from the repository root:
     python ocean_trash/src/model/train_baseline.py
     python ocean_trash/src/model/train_baseline.py --device 2 --batch 16
+    python ocean_trash/src/model/train_baseline.py --epochs 500 --patience 50 --set lr0=0.0005
 
 Requires CUDA-enabled PyTorch. The default device is GPU 0; no CPU fallback is used.
 The first run downloads COCO-pretrained weights if unavailable locally.
@@ -15,6 +16,8 @@ These are project baseline settings, not a reproduction of the author's Mask R-C
 import argparse
 import sys
 from pathlib import Path
+
+import yaml
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT.parent))
@@ -36,6 +39,7 @@ def parse_args():
     parser.add_argument("--device", default="0", help="Training GPU index, e.g. 0 or 2,5")
     parser.add_argument("--workers", type=int, default=4, help="Data-loader workers per GPU")
     parser.add_argument("--name", default="trashcan_instance_yolo11n_baseline")
+    parser.add_argument("--set", action="append", metavar="KEY=VALUE", help="Override any Ultralytics training argument")
     return parser.parse_args()
 
 
@@ -45,7 +49,7 @@ def main():
     model = YOLO(args.model)
     if model.task != "segment":
         raise ValueError("This baseline requires an instance-segmentation model, such as yolo11n-seg.pt.")
-    model.train(
+    train_args = dict(
         data=str(args.data.resolve()),
         epochs=args.epochs,
         patience=args.patience,
@@ -65,6 +69,12 @@ def main():
         project=str(PROJECT_ROOT / "runs/segment"),
         name=args.name,
     )
+    for setting in args.set or ():
+        key, separator, value = setting.partition("=")
+        if not key or not separator:
+            raise ValueError(f"Expected --set KEY=VALUE, got {setting!r}")
+        train_args[key] = yaml.safe_load(value)
+    model.train(**train_args)
 
 
 if __name__ == "__main__":
