@@ -10,7 +10,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO_ROOT))
 
-from ultralytics.data.converter import convert_coco  # noqa: E402
+from ultralytics.data.converter import convert_coco
 
 
 def parse_args():
